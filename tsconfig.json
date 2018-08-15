@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "importHelpers": true,
+    "module": "commonjs",
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "preserveConstEnums": true,
+    "removeComments": true,
+    "target": "ES6",
+    "sourceMap": true,
+    "experimentalDecorators": true,
+    "noErrorTruncation": true,
+    "lib": [
+      "es6"
+    ],
+    "baseUrl": ".",
+    "types": [
+      "mocha",
+      "node"
+    ]
+  },
+  "include": [
+    "./src/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

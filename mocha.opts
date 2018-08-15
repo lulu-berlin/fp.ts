@@ -1,0 +1,5 @@
+--require ts-node/register/type-check
+--reporter spec
+--watch-extensions ts
+
+src/**/*.spec.ts
