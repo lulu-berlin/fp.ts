@@ -147,26 +147,15 @@ describe('Lens', () => {
       });
     });
 
+    const snd = <A, B> (): Lens<[A, B], B> => ({
+      get: (data: [A, B]): B => data[1],
+      set: (value: B) => (data: [A, B]) => [data[0], value]
+    });
+
     it('should be able to compose 4 lenses', () => {
       type Data = [number, [number, [number, [number, string]]]];
       const data: Data = [1, [2, [3, [4, 'bla']]]];
-      const l1: Lens<Data, Data[1]> = {
-        get: data => data[1],
-        set: value => data => [data[0], value]
-      };
-      const l2: Lens<Data[1], Data[1][1]> = {
-        get: data => data[1],
-        set: value => data => [data[0], value]
-      };
-      const l3: Lens<Data[1][1], Data[1][1][1]> = {
-        get: data => data[1],
-        set: value => data => [data[0], value]
-      };
-      const l4: Lens<Data[1][1][1], Data[1][1][1][1]> = {
-        get: data => data[1],
-        set: value => data => [data[0], value]
-      };
-      const composedLens = Lens.compose(l1, l2, l3, l4);
+      const composedLens = Lens.compose(snd(), snd(), snd(), snd());
 
       const getResult = composedLens.get(data);
       expect(getResult).to.equal('bla');
@@ -178,27 +167,7 @@ describe('Lens', () => {
     it('should be able to compose 5 lenses', () => {
       type Data = [number, [number, [number, [number, [number, string]]]]];
       const data: Data = [1, [2, [3, [4, [5, 'bla']]]]];
-      const l1: Lens<Data, Data[1]> = {
-        get: data => data[1],
-        set: value => data => [data[0], value]
-      };
-      const l2: Lens<Data[1], Data[1][1]> = {
-        get: data => data[1],
-        set: value => data => [data[0], value]
-      };
-      const l3: Lens<Data[1][1], Data[1][1][1]> = {
-        get: data => data[1],
-        set: value => data => [data[0], value]
-      };
-      const l4: Lens<Data[1][1][1], Data[1][1][1][1]> = {
-        get: data => data[1],
-        set: value => data => [data[0], value]
-      };
-      const l5: Lens<Data[1][1][1][1], Data[1][1][1][1][1]> = {
-        get: data => data[1],
-        set: value => data => [data[0], value]
-      };
-      const composedLens = Lens.compose(l1, l2, l3, l4, l5);
+      const composedLens = Lens.compose(snd(), snd(), snd(), snd(), snd());
 
       const getResult = composedLens.get(data);
       expect(getResult).to.equal('bla');
@@ -210,31 +179,7 @@ describe('Lens', () => {
     it('should be able to compose 6 lenses', () => {
       type Data = [number, [number, [number, [number, [number, [number, string]]]]]];
       const data: Data = [1, [2, [3, [4, [5, [6, 'bla']]]]]];
-      const l1: Lens<Data, Data[1]> = {
-        get: data => data[1],
-        set: value => data => [data[0], value]
-      };
-      const l2: Lens<Data[1], Data[1][1]> = {
-        get: data => data[1],
-        set: value => data => [data[0], value]
-      };
-      const l3: Lens<Data[1][1], Data[1][1][1]> = {
-        get: data => data[1],
-        set: value => data => [data[0], value]
-      };
-      const l4: Lens<Data[1][1][1], Data[1][1][1][1]> = {
-        get: data => data[1],
-        set: value => data => [data[0], value]
-      };
-      const l5: Lens<Data[1][1][1][1], Data[1][1][1][1][1]> = {
-        get: data => data[1],
-        set: value => data => [data[0], value]
-      };
-      const l6: Lens<Data[1][1][1][1][1], Data[1][1][1][1][1][1]> = {
-        get: data => data[1],
-        set: value => data => [data[0], value]
-      };
-      const composedLens = Lens.compose(l1, l2, l3, l4, l5, l6);
+      const composedLens = Lens.compose(snd(), snd(), snd(), snd(), snd(), snd());
 
       const getResult = composedLens.get(data);
       expect(getResult).to.equal('bla');
@@ -246,35 +191,7 @@ describe('Lens', () => {
     it('should be able to compose 7 lenses', () => {
       type Data = [number, [number, [number, [number, [number, [number, [number, string]]]]]]];
       const data: Data = [1, [2, [3, [4, [5, [6, [7, 'bla']]]]]]];
-      const l1: Lens<Data, Data[1]> = {
-        get: data => data[1],
-        set: value => data => [data[0], value]
-      };
-      const l2: Lens<Data[1], Data[1][1]> = {
-        get: data => data[1],
-        set: value => data => [data[0], value]
-      };
-      const l3: Lens<Data[1][1], Data[1][1][1]> = {
-        get: data => data[1],
-        set: value => data => [data[0], value]
-      };
-      const l4: Lens<Data[1][1][1], Data[1][1][1][1]> = {
-        get: data => data[1],
-        set: value => data => [data[0], value]
-      };
-      const l5: Lens<Data[1][1][1][1], Data[1][1][1][1][1]> = {
-        get: data => data[1],
-        set: value => data => [data[0], value]
-      };
-      const l6: Lens<Data[1][1][1][1][1], Data[1][1][1][1][1][1]> = {
-        get: data => data[1],
-        set: value => data => [data[0], value]
-      };
-      const l7: Lens<Data[1][1][1][1][1][1], Data[1][1][1][1][1][1][1]> = {
-        get: data => data[1],
-        set: value => data => [data[0], value]
-      };
-      const composedLens = Lens.compose(l1, l2, l3, l4, l5, l6, l7);
+      const composedLens = Lens.compose(snd(), snd(), snd(), snd(), snd(), snd(), snd());
 
       const getResult = composedLens.get(data);
       expect(getResult).to.equal('bla');
@@ -288,39 +205,7 @@ describe('Lens', () => {
         number, [number, [number, [number, [number, [number, [number, [number, string]]]]]]]
       ];
       const data: Data = [1, [2, [3, [4, [5, [6, [7, [8, 'bla']]]]]]]];
-      const l1: Lens<Data, Data[1]> = {
-        get: data => data[1],
-        set: value => data => [data[0], value]
-      };
-      const l2: Lens<Data[1], Data[1][1]> = {
-        get: data => data[1],
-        set: value => data => [data[0], value]
-      };
-      const l3: Lens<Data[1][1], Data[1][1][1]> = {
-        get: data => data[1],
-        set: value => data => [data[0], value]
-      };
-      const l4: Lens<Data[1][1][1], Data[1][1][1][1]> = {
-        get: data => data[1],
-        set: value => data => [data[0], value]
-      };
-      const l5: Lens<Data[1][1][1][1], Data[1][1][1][1][1]> = {
-        get: data => data[1],
-        set: value => data => [data[0], value]
-      };
-      const l6: Lens<Data[1][1][1][1][1], Data[1][1][1][1][1][1]> = {
-        get: data => data[1],
-        set: value => data => [data[0], value]
-      };
-      const l7: Lens<Data[1][1][1][1][1][1], Data[1][1][1][1][1][1][1]> = {
-        get: data => data[1],
-        set: value => data => [data[0], value]
-      };
-      const l8: Lens<Data[1][1][1][1][1][1][1], Data[1][1][1][1][1][1][1][1]> = {
-        get: data => data[1],
-        set: value => data => [data[0], value]
-      };
-      const composedLens = Lens.compose(l1, l2, l3, l4, l5, l6, l7, l8);
+      const composedLens = Lens.compose(snd(), snd(), snd(), snd(), snd(), snd(), snd(), snd());
 
       const getResult = composedLens.get(data);
       expect(getResult).to.equal('bla');
@@ -336,43 +221,7 @@ describe('Lens', () => {
         ]
       ];
       const data: Data = [1, [2, [3, [4, [5, [6, [7, [8, [9, 'bla']]]]]]]]];
-      const l1: Lens<Data, Data[1]> = {
-        get: data => data[1],
-        set: value => data => [data[0], value]
-      };
-      const l2: Lens<Data[1], Data[1][1]> = {
-        get: data => data[1],
-        set: value => data => [data[0], value]
-      };
-      const l3: Lens<Data[1][1], Data[1][1][1]> = {
-        get: data => data[1],
-        set: value => data => [data[0], value]
-      };
-      const l4: Lens<Data[1][1][1], Data[1][1][1][1]> = {
-        get: data => data[1],
-        set: value => data => [data[0], value]
-      };
-      const l5: Lens<Data[1][1][1][1], Data[1][1][1][1][1]> = {
-        get: data => data[1],
-        set: value => data => [data[0], value]
-      };
-      const l6: Lens<Data[1][1][1][1][1], Data[1][1][1][1][1][1]> = {
-        get: data => data[1],
-        set: value => data => [data[0], value]
-      };
-      const l7: Lens<Data[1][1][1][1][1][1], Data[1][1][1][1][1][1][1]> = {
-        get: data => data[1],
-        set: value => data => [data[0], value]
-      };
-      const l8: Lens<Data[1][1][1][1][1][1][1], Data[1][1][1][1][1][1][1][1]> = {
-        get: data => data[1],
-        set: value => data => [data[0], value]
-      };
-      const l9: Lens<Data[1][1][1][1][1][1][1][1], Data[1][1][1][1][1][1][1][1][1]> = {
-        get: data => data[1],
-        set: value => data => [data[0], value]
-      };
-      const composedLens = Lens.compose(l1, l2, l3, l4, l5, l6, l7, l8, l9);
+      const composedLens = Lens.compose(snd(), snd(), snd(), snd(), snd(), snd(), snd(), snd(), snd());
 
       const getResult = composedLens.get(data);
       expect(getResult).to.equal('bla');
@@ -386,47 +235,7 @@ describe('Lens', () => {
         number, [number, [number, [number, [number, [number, [number, [number, string]]]]]]]
       ] ] ];
       const data: Data = [1, [2, [3, [4, [5, [6, [7, [8, [9, [10, 'bla']]]]]]]]]];
-      const l1: Lens<Data, Data[1]> = {
-        get: data => data[1],
-        set: value => data => [data[0], value]
-      };
-      const l2: Lens<Data[1], Data[1][1]> = {
-        get: data => data[1],
-        set: value => data => [data[0], value]
-      };
-      const l3: Lens<Data[1][1], Data[1][1][1]> = {
-        get: data => data[1],
-        set: value => data => [data[0], value]
-      };
-      const l4: Lens<Data[1][1][1], Data[1][1][1][1]> = {
-        get: data => data[1],
-        set: value => data => [data[0], value]
-      };
-      const l5: Lens<Data[1][1][1][1], Data[1][1][1][1][1]> = {
-        get: data => data[1],
-        set: value => data => [data[0], value]
-      };
-      const l6: Lens<Data[1][1][1][1][1], Data[1][1][1][1][1][1]> = {
-        get: data => data[1],
-        set: value => data => [data[0], value]
-      };
-      const l7: Lens<Data[1][1][1][1][1][1], Data[1][1][1][1][1][1][1]> = {
-        get: data => data[1],
-        set: value => data => [data[0], value]
-      };
-      const l8: Lens<Data[1][1][1][1][1][1][1], Data[1][1][1][1][1][1][1][1]> = {
-        get: data => data[1],
-        set: value => data => [data[0], value]
-      };
-      const l9: Lens<Data[1][1][1][1][1][1][1][1], Data[1][1][1][1][1][1][1][1][1]> = {
-        get: data => data[1],
-        set: value => data => [data[0], value]
-      };
-      const l10: Lens<Data[1][1][1][1][1][1][1][1][1], Data[1][1][1][1][1][1][1][1][1][1]> = {
-        get: data => data[1],
-        set: value => data => [data[0], value]
-      };
-      const composedLens = Lens.compose(l1, l2, l3, l4, l5, l6, l7, l8, l9, l10);
+      const composedLens = Lens.compose(snd(), snd(), snd(), snd(), snd(), snd(), snd(), snd(), snd(), snd());
 
       const getResult = composedLens.get(data);
       expect(getResult).to.equal('bla');
@@ -435,6 +244,4 @@ describe('Lens', () => {
       expect(setResult).to.eql([1, [2, [3, [4, [5, [6, [7, [8, [9, [10, 'bla bla']]]]]]]]]]);
     });
   });
-
-
 });
