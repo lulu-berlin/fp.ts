@@ -1,6 +1,11 @@
 import {expect} from 'chai';
 import {Lens} from './lens';
 
+const snd = <A, B> (): Lens<[A, B], B> => ({
+  get: (data: [A, B]): B => data[1],
+  set: (value: B) => (data: [A, B]) => [data[0], value]
+});
+
 describe('Lens', () => {
   type Child1 = Readonly<{
     stuff: string;
@@ -147,10 +152,6 @@ describe('Lens', () => {
       });
     });
 
-    const snd = <A, B> (): Lens<[A, B], B> => ({
-      get: (data: [A, B]): B => data[1],
-      set: (value: B) => (data: [A, B]) => [data[0], value]
-    });
 
     it('should be able to compose 4 lenses', () => {
       type Data = [number, [number, [number, [number, string]]]];
@@ -242,6 +243,159 @@ describe('Lens', () => {
 
       const setResult = composedLens.set('bla bla')(data);
       expect(setResult).to.eql([1, [2, [3, [4, [5, [6, [7, [8, [9, [10, 'bla bla']]]]]]]]]]);
+    });
+  });
+
+  describe('Lens.over()', () => {
+    it('should create a lens over a specified key', () => {
+      const lens: Lens<Wrapper, Child1> = Lens.over('child1');
+
+      const getResult = lens.get(wrapper);
+      expect(getResult).to.eql({stuff: 'stuff'});
+
+      const setResult = lens.set({stuff: 'new stuff'})(wrapper);
+      expect(setResult).to.eql({
+        child1: { stuff: 'new stuff' },
+        child2: { data: 123, child1: { stuff: 'other stuff' } },
+        toplevel: 'top'
+      });
+    });
+
+    it('should return an array for a lens over an array', () => {
+      const lens: Lens<[string], string> = Lens.over(0);
+      const data: [string] = ['string in an array'];
+
+      const getResult = lens.get(data);
+      expect(getResult).to.equal('string in an array');
+
+      const setResult = lens.set('another string')(data);
+      expect(setResult).to.eql(['another string']);
+    });
+
+    it('should create a lens over 2 nested keys', () => {
+      const lens: Lens<Wrapper, string> = Lens.over('child1', 'stuff');
+
+      const getResult = lens.get(wrapper);
+      expect(getResult).to.eql('stuff');
+
+      const setResult = lens.set('new stuff')(wrapper);
+      expect(setResult).to.eql({
+        child1: { stuff: 'new stuff' },
+        child2: { data: 123, child1: { stuff: 'other stuff' } },
+        toplevel: 'top'
+      });
+    });
+
+    it('should create a lens over 3 nested keys', () => {
+      type Data = [1, [2, [3, string]]];
+
+      const lens: Lens<Data, string> = Lens.over(1, 1, 1);
+
+      const data: Data = [1, [2, [3, 'string']]];
+
+      const getResult = lens.get(data);
+      expect(getResult).to.equal('string');
+
+      const setResult = lens.set('stuff')(data);
+      expect(setResult).to.eql([1, [2, [3, 'stuff']]]);
+    });
+
+    it('should create a lens over 4 nested keys', () => {
+      type Data = [1, [2, [3, [4, string]]]];
+
+      const lens: Lens<Data, string> = Lens.over(1, 1, 1, 1);
+
+      const data: Data = [1, [2, [3, [4, 'string']]]];
+
+      const getResult = lens.get(data);
+      expect(getResult).to.equal('string');
+
+      const setResult = lens.set('stuff')(data);
+      expect(setResult).to.eql([1, [2, [3, [4, 'stuff']]]]);
+    });
+
+    it('should create a lens over 5 nested keys', () => {
+      type Data = [1, [2, [3, [4, [5, string]]]]];
+
+      const lens: Lens<Data, string> = Lens.over(1, 1, 1, 1, 1);
+
+      const data: Data = [1, [2, [3, [4, [5, 'string']]]]];
+
+      const getResult = lens.get(data);
+      expect(getResult).to.equal('string');
+
+      const setResult = lens.set('stuff')(data);
+      expect(setResult).to.eql([1, [2, [3, [4, [5, 'stuff']]]]]);
+    });
+
+    it('should create a lens over 6 nested keys', () => {
+      type Data = [1, [2, [3, [4, [5, [6, string]]]]]];
+
+      const lens: Lens<Data, string> = Lens.over(1, 1, 1, 1, 1, 1);
+
+      const data: Data = [1, [2, [3, [4, [5, [6, 'string']]]]]];
+
+      const getResult = lens.get(data);
+      expect(getResult).to.equal('string');
+
+      const setResult = lens.set('stuff')(data);
+      expect(setResult).to.eql([1, [2, [3, [4, [5, [6, 'stuff']]]]]]);
+    });
+
+    it('should create a lens over 7 nested keys', () => {
+      type Data = [1, [2, [3, [4, [5, [6, [7, string]]]]]]];
+
+      const lens: Lens<Data, string> = Lens.over(1, 1, 1, 1, 1, 1, 1);
+
+      const data: Data = [1, [2, [3, [4, [5, [6, [7, 'string']]]]]]];
+
+      const getResult = lens.get(data);
+      expect(getResult).to.equal('string');
+
+      const setResult = lens.set('stuff')(data);
+      expect(setResult).to.eql([1, [2, [3, [4, [5, [6, [7, 'stuff']]]]]]]);
+    });
+
+    it('should create a lens over 8 nested keys', () => {
+      type Data = [1, [2, [3, [4, [5, [6, [7, [8, string]]]]]]]];
+
+      const lens: Lens<Data, string> = Lens.over(1, 1, 1, 1, 1, 1, 1, 1);
+
+      const data: Data = [1, [2, [3, [4, [5, [6, [7, [8, 'string']]]]]]]];
+
+      const getResult = lens.get(data);
+      expect(getResult).to.equal('string');
+
+      const setResult = lens.set('stuff')(data);
+      expect(setResult).to.eql([1, [2, [3, [4, [5, [6, [7, [8, 'stuff']]]]]]]]);
+    });
+
+    it('should create a lens over 9 nested keys', () => {
+      type Data = [1, [2, [3, [4, [5, [6, [7, [8, [9, string]]]]]]]]];
+
+      const lens: Lens<Data, string> = Lens.over(1, 1, 1, 1, 1, 1, 1, 1, 1);
+
+      const data: Data = [1, [2, [3, [4, [5, [6, [7, [8, [9, 'string']]]]]]]]];
+
+      const getResult = lens.get(data);
+      expect(getResult).to.equal('string');
+
+      const setResult = lens.set('stuff')(data);
+      expect(setResult).to.eql([1, [2, [3, [4, [5, [6, [7, [8, [9, 'stuff']]]]]]]]]);
+    });
+
+    it('should create a lens over 10 nested keys', () => {
+      type Data = [1, [2, [3, [4, [5, [6, [7, [8, [9, [10, string]]]]]]]]]];
+
+      const lens: Lens<Data, string> = Lens.over(1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+
+      const data: Data = [1, [2, [3, [4, [5, [6, [7, [8, [9, [10, 'string']]]]]]]]]];
+
+      const getResult = lens.get(data);
+      expect(getResult).to.equal('string');
+
+      const setResult = lens.set('stuff')(data);
+      expect(setResult).to.eql([1, [2, [3, [4, [5, [6, [7, [8, [9, [10, 'stuff']]]]]]]]]]);
     });
   });
 });
