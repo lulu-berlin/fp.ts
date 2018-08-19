@@ -59,3 +59,10 @@ typings/
 
 # next.js build output
 .next
+
+# generates js files
+src/**/*.js
+src/**/*.js.map
+
+# VIM swap files
+.*.sw?
