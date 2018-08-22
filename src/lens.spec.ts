@@ -26,8 +26,8 @@ describe('Lens', () => {
 
   beforeEach(() => {
     wrapper = {
-      child1: { stuff: 'stuff' },
-      child2: { data: 123, child1: { stuff: 'other stuff' } },
+      child1: {stuff: 'stuff'},
+      child2: {data: 123, child1: {stuff: 'other stuff'}},
       toplevel: 'top'
     };
   });
@@ -42,8 +42,8 @@ describe('Lens', () => {
       const result = Lens.update(lens)(s => s.toUpperCase())(wrapper);
 
       expect(result).to.eql({
-        child1: { stuff: 'stuff' },
-        child2: { data: 123, child1: { stuff: 'other stuff' } },
+        child1: {stuff: 'stuff'},
+        child2: {data: 123, child1: {stuff: 'other stuff'}},
         toplevel: 'TOP'
       });
     });
@@ -63,8 +63,8 @@ describe('Lens', () => {
       const result = Lens.update(lens)(n => n + 1000)(wrapper);
 
       expect(result).to.eql({
-        child1: { stuff: 'stuff' },
-        child2: { data: 1123, child1: { stuff: 'other stuff' } },
+        child1: {stuff: 'stuff'},
+        child2: {data: 1123, child1: {stuff: 'other stuff'}},
         toplevel: 'top'
       });
     });
@@ -97,8 +97,8 @@ describe('Lens', () => {
       const wrapperToStuff = Lens.compose(child1ToStuff)(wrapperToChild1);
       const result = wrapperToStuff.set('new stuff')(wrapper);
       expect(result).to.eql({
-        child1: { stuff: 'new stuff' },
-        child2: { data: 123, child1: { stuff: 'other stuff' } },
+        child1: {stuff: 'new stuff'},
+        child2: {data: 123, child1: {stuff: 'other stuff'}},
         toplevel: 'top'
       });
     });
@@ -113,8 +113,8 @@ describe('Lens', () => {
       const wrapperToStuff = Lens.compose(wrapperToChild1, child1ToStuff);
       const result = wrapperToStuff.set('new stuff')(wrapper);
       expect(result).to.eql({
-        child1: { stuff: 'new stuff' },
-        child2: { data: 123, child1: { stuff: 'other stuff' } },
+        child1: {stuff: 'new stuff'},
+        child2: {data: 123, child1: {stuff: 'other stuff'}},
         toplevel: 'top'
       });
     });
@@ -146,8 +146,8 @@ describe('Lens', () => {
 
       const setResult = wrapperToInternalStuff.set('bla bla')(wrapper);
       expect(setResult).to.eql({
-        child1: { stuff: 'stuff' },
-        child2: { data: 123, child1: { stuff: 'bla bla' } },
+        child1: {stuff: 'stuff'},
+        child2: {data: 123, child1: {stuff: 'bla bla'}},
         toplevel: 'top'
       });
     });
@@ -222,7 +222,9 @@ describe('Lens', () => {
         ]
       ];
       const data: Data = [1, [2, [3, [4, [5, [6, [7, [8, [9, 'bla']]]]]]]]];
-      const composedLens = Lens.compose(snd(), snd(), snd(), snd(), snd(), snd(), snd(), snd(), snd());
+      const composedLens = Lens.compose(
+        snd(), snd(), snd(), snd(), snd(), snd(), snd(), snd(), snd()
+      );
 
       const getResult = composedLens.get(data);
       expect(getResult).to.equal('bla');
@@ -236,7 +238,9 @@ describe('Lens', () => {
         number, [number, [number, [number, [number, [number, [number, [number, string]]]]]]]
       ] ] ];
       const data: Data = [1, [2, [3, [4, [5, [6, [7, [8, [9, [10, 'bla']]]]]]]]]];
-      const composedLens = Lens.compose(snd(), snd(), snd(), snd(), snd(), snd(), snd(), snd(), snd(), snd());
+      const composedLens = Lens.compose(
+        snd(), snd(), snd(), snd(), snd(), snd(), snd(), snd(), snd(), snd()
+      );
 
       const getResult = composedLens.get(data);
       expect(getResult).to.equal('bla');
@@ -248,21 +252,21 @@ describe('Lens', () => {
 
   describe('Lens.over()', () => {
     it('should create a lens over a specified key', () => {
-      const lens: Lens<Wrapper, Child1> = Lens.over('child1');
+      const lens = Lens.over<Wrapper>('child1');
 
       const getResult = lens.get(wrapper);
       expect(getResult).to.eql({stuff: 'stuff'});
 
       const setResult = lens.set({stuff: 'new stuff'})(wrapper);
       expect(setResult).to.eql({
-        child1: { stuff: 'new stuff' },
-        child2: { data: 123, child1: { stuff: 'other stuff' } },
+        child1: {stuff: 'new stuff'},
+        child2: {data: 123, child1: {stuff: 'other stuff'}},
         toplevel: 'top'
       });
     });
 
     it('should return an array for a lens over an array', () => {
-      const lens: Lens<[string], string> = Lens.over(0);
+      const lens = Lens.over<[string]>(0);
       const data: [string] = ['string in an array'];
 
       const getResult = lens.get(data);
@@ -280,8 +284,8 @@ describe('Lens', () => {
 
       const setResult = lens.set('new stuff')(wrapper);
       expect(setResult).to.eql({
-        child1: { stuff: 'new stuff' },
-        child2: { data: 123, child1: { stuff: 'other stuff' } },
+        child1: {stuff: 'new stuff'},
+        child2: {data: 123, child1: {stuff: 'other stuff'}},
         toplevel: 'top'
       });
     });

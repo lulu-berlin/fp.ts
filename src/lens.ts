@@ -59,44 +59,39 @@ export namespace Lens {
 
   const _over = <T, K extends keyof T> (key: K): Lens<T, T[K]> => ({
     get: (t: T): T[K] => t[key],
-    set: (data: T[K]) => (t: T): T => Array.isArray(t) ?
+    set: (data: T[K]) => (t: T): T =>
+      t === undefined || t === null ? t :
+      Array.isArray(t) ?
       [...t.slice(0, +key), data, ...t.slice(+key + 1)] :
       {...(t as any), [key]: data}
   });
 
-  export function over<T, K extends keyof T>(key: K): Lens<T, T[K]>;
-  export function over<T, K1 extends keyof T, K2 extends keyof T[K1]>(
+  export function over<T>(key: keyof T): Lens<T, T[keyof T]>;
+  export function over<T, K1 extends keyof T = keyof T, K2 extends keyof T[K1] = keyof T[K1]>(
     k1: K1, k2: K2
   ): Lens<T, T[K1][K2]>;
-  export function over<T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2]>(
-    k1: K1, k2: K2, k3: K3
-  ): Lens<T, T[K1][K2][K3]>;
+  export function over<
+    T, K1 extends keyof T = keyof T, K2 extends keyof T[K1] = keyof T[K1],
+    K3 extends keyof T[K1][K2] = keyof T[K1][K2]
+  >(k1: K1, k2: K2, k3: K3): Lens<T, T[K1][K2][K3]>;
   export function over<
     T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2],
     K4 extends keyof T[K1][K2][K3]
-  >(
-    k1: K1, k2: K2, k3: K3, k4: K4
-  ): Lens<T, T[K1][K2][K3][K4]>;
+  >(k1: K1, k2: K2, k3: K3, k4: K4): Lens<T, T[K1][K2][K3][K4]>;
   export function over<
     T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2],
     K4 extends keyof T[K1][K2][K3], K5 extends keyof T[K1][K2][K3][K4]
-  >(
-    k1: K1, k2: K2, k3: K3, k4: K4, k5: K5
-  ): Lens<T, T[K1][K2][K3][K4][K5]>;
+  >(k1: K1, k2: K2, k3: K3, k4: K4, k5: K5): Lens<T, T[K1][K2][K3][K4][K5]>;
   export function over<
     T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2],
     K4 extends keyof T[K1][K2][K3], K5 extends keyof T[K1][K2][K3][K4],
     K6 extends keyof T[K1][K2][K3][K4][K5]
-  >(
-    k1: K1, k2: K2, k3: K3, k4: K4, k5: K5, k6: K6
-  ): Lens<T, T[K1][K2][K3][K4][K5][K6]>;
+  >(k1: K1, k2: K2, k3: K3, k4: K4, k5: K5, k6: K6): Lens<T, T[K1][K2][K3][K4][K5][K6]>;
   export function over<
     T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2],
     K4 extends keyof T[K1][K2][K3], K5 extends keyof T[K1][K2][K3][K4],
     K6 extends keyof T[K1][K2][K3][K4][K5], K7 extends keyof T[K1][K2][K3][K4][K5][K6]
-  >(
-    k1: K1, k2: K2, k3: K3, k4: K4, k5: K5, k6: K6, k7: K7
-  ): Lens<T, T[K1][K2][K3][K4][K5][K6][K7]>;
+  >(k1: K1, k2: K2, k3: K3, k4: K4, k5: K5, k6: K6, k7: K7): Lens<T, T[K1][K2][K3][K4][K5][K6][K7]>;
   export function over<
     T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2],
     K4 extends keyof T[K1][K2][K3], K5 extends keyof T[K1][K2][K3][K4],
