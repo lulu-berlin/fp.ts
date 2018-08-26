@@ -250,9 +250,9 @@ describe('Lens', () => {
     });
   });
 
-  describe('Lens.over()', () => {
-    it('should create a lens over a specified key', () => {
-      const lens = Lens.over<Wrapper>('child1');
+  describe('Lens.create()', () => {
+    it('should create a lens with a specified key', () => {
+      const lens = Lens.create<Wrapper>('child1');
 
       const getResult = lens.get(wrapper);
       expect(getResult).to.eql({stuff: 'stuff'});
@@ -266,7 +266,7 @@ describe('Lens', () => {
     });
 
     it('should return an array for a lens over an array', () => {
-      const lens = Lens.over<[string]>(0);
+      const lens = Lens.create<[string]>(0);
       const data: [string] = ['string in an array'];
 
       const getResult = lens.get(data);
@@ -276,8 +276,8 @@ describe('Lens', () => {
       expect(setResult).to.eql(['another string']);
     });
 
-    it('should create a lens over 2 nested keys', () => {
-      const lens: Lens<Wrapper, string> = Lens.over('child1', 'stuff');
+    it('should create a lens for 2 nested keys', () => {
+      const lens: Lens<Wrapper, string> = Lens.create('child1', 'stuff');
 
       const getResult = lens.get(wrapper);
       expect(getResult).to.eql('stuff');
@@ -290,10 +290,10 @@ describe('Lens', () => {
       });
     });
 
-    it('should create a lens over 3 nested keys', () => {
+    it('should create a lens for 3 nested keys', () => {
       type Data = [1, [2, [3, string]]];
 
-      const lens: Lens<Data, string> = Lens.over(1, 1, 1);
+      const lens: Lens<Data, string> = Lens.create(1, 1, 1);
 
       const data: Data = [1, [2, [3, 'string']]];
 
@@ -304,10 +304,10 @@ describe('Lens', () => {
       expect(setResult).to.eql([1, [2, [3, 'stuff']]]);
     });
 
-    it('should create a lens over 4 nested keys', () => {
+    it('should create a lens for 4 nested keys', () => {
       type Data = [1, [2, [3, [4, string]]]];
 
-      const lens: Lens<Data, string> = Lens.over(1, 1, 1, 1);
+      const lens: Lens<Data, string> = Lens.create(1, 1, 1, 1);
 
       const data: Data = [1, [2, [3, [4, 'string']]]];
 
@@ -318,10 +318,10 @@ describe('Lens', () => {
       expect(setResult).to.eql([1, [2, [3, [4, 'stuff']]]]);
     });
 
-    it('should create a lens over 5 nested keys', () => {
+    it('should create a lens for 5 nested keys', () => {
       type Data = [1, [2, [3, [4, [5, string]]]]];
 
-      const lens: Lens<Data, string> = Lens.over(1, 1, 1, 1, 1);
+      const lens: Lens<Data, string> = Lens.create(1, 1, 1, 1, 1);
 
       const data: Data = [1, [2, [3, [4, [5, 'string']]]]];
 
@@ -332,10 +332,10 @@ describe('Lens', () => {
       expect(setResult).to.eql([1, [2, [3, [4, [5, 'stuff']]]]]);
     });
 
-    it('should create a lens over 6 nested keys', () => {
+    it('should create a lens for 6 nested keys', () => {
       type Data = [1, [2, [3, [4, [5, [6, string]]]]]];
 
-      const lens: Lens<Data, string> = Lens.over(1, 1, 1, 1, 1, 1);
+      const lens: Lens<Data, string> = Lens.create(1, 1, 1, 1, 1, 1);
 
       const data: Data = [1, [2, [3, [4, [5, [6, 'string']]]]]];
 
@@ -346,10 +346,10 @@ describe('Lens', () => {
       expect(setResult).to.eql([1, [2, [3, [4, [5, [6, 'stuff']]]]]]);
     });
 
-    it('should create a lens over 7 nested keys', () => {
+    it('should create a lens for 7 nested keys', () => {
       type Data = [1, [2, [3, [4, [5, [6, [7, string]]]]]]];
 
-      const lens: Lens<Data, string> = Lens.over(1, 1, 1, 1, 1, 1, 1);
+      const lens: Lens<Data, string> = Lens.create(1, 1, 1, 1, 1, 1, 1);
 
       const data: Data = [1, [2, [3, [4, [5, [6, [7, 'string']]]]]]];
 
@@ -360,10 +360,10 @@ describe('Lens', () => {
       expect(setResult).to.eql([1, [2, [3, [4, [5, [6, [7, 'stuff']]]]]]]);
     });
 
-    it('should create a lens over 8 nested keys', () => {
+    it('should create a lens for 8 nested keys', () => {
       type Data = [1, [2, [3, [4, [5, [6, [7, [8, string]]]]]]]];
 
-      const lens: Lens<Data, string> = Lens.over(1, 1, 1, 1, 1, 1, 1, 1);
+      const lens: Lens<Data, string> = Lens.create(1, 1, 1, 1, 1, 1, 1, 1);
 
       const data: Data = [1, [2, [3, [4, [5, [6, [7, [8, 'string']]]]]]]];
 
@@ -374,10 +374,10 @@ describe('Lens', () => {
       expect(setResult).to.eql([1, [2, [3, [4, [5, [6, [7, [8, 'stuff']]]]]]]]);
     });
 
-    it('should create a lens over 9 nested keys', () => {
+    it('should create a lens for 9 nested keys', () => {
       type Data = [1, [2, [3, [4, [5, [6, [7, [8, [9, string]]]]]]]]];
 
-      const lens: Lens<Data, string> = Lens.over(1, 1, 1, 1, 1, 1, 1, 1, 1);
+      const lens: Lens<Data, string> = Lens.create(1, 1, 1, 1, 1, 1, 1, 1, 1);
 
       const data: Data = [1, [2, [3, [4, [5, [6, [7, [8, [9, 'string']]]]]]]]];
 
@@ -388,10 +388,10 @@ describe('Lens', () => {
       expect(setResult).to.eql([1, [2, [3, [4, [5, [6, [7, [8, [9, 'stuff']]]]]]]]]);
     });
 
-    it('should create a lens over 10 nested keys', () => {
+    it('should create a lens for 10 nested keys', () => {
       type Data = [1, [2, [3, [4, [5, [6, [7, [8, [9, [10, string]]]]]]]]]];
 
-      const lens: Lens<Data, string> = Lens.over(1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+      const lens: Lens<Data, string> = Lens.create(1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
 
       const data: Data = [1, [2, [3, [4, [5, [6, [7, [8, [9, [10, 'string']]]]]]]]]];
 

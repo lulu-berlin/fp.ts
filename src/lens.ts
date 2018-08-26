@@ -11,6 +11,17 @@ export namespace Lens {
 
   export function update<A, B>(lens: Lens<A, B>, f: (b: B) => B, a: A): A;
   export function update<A, B>(lens: Lens<A, B>): (f: (b: B) => B) => (a: A) => A;
+  /**
+   * Use a lens to get a value and then set a new value, using a "map" function.
+   *
+   * This function has a curried version: Lens<A, B> => (B => B) => A => A
+   * And a version with parameters: (Lens<A, B>, (B => B), A) => A
+   *
+   * @param {Lens<A, B>} lens
+   * @param {(B => B)?} f
+   * @param {A?} a
+   * @returns {((B => B) => A => A) | A}
+   */
   export function update<A, B>(lens: Lens<A, B>, f?: (b: B) => B, a?: A) {
     return f ? _update(lens, f, a) : _curriedUpdate(lens);
   }
@@ -53,11 +64,19 @@ export namespace Lens {
     l1: Lens<A, B>, l2: Lens<B, C>, l3: Lens<C, D>, l4: Lens<D, E>, l5: Lens<E, F>, l6: Lens<F, G>,
     l7: Lens<G, H>, l8: Lens<H, I>, l9: Lens<I, J>, l10: Lens<J, K>
   ): Lens<A, K>;
+  /**
+   * Compose 2 or more lenses to create a composed lens.
+   *
+   * Calling it with 1 parameter is the curried version: Lens<B, C> => Lens<A, B> => Lens<A, C>
+   *
+   * @param {...Lens} lens
+   * @returns {Lens}
+   */
   export function compose<A, B, C>(first: Lens<any, any>, ...lenses: Lens<any, any>[]) {
     return lenses.length === 0 ? _curriedCompose(first) : _composeMany(first, ...lenses);
   }
 
-  const _over = <T, K extends keyof T> (key: K): Lens<T, T[K]> => ({
+  const _create = <T, K extends keyof T> (key: K): Lens<T, T[K]> => ({
     get: (t: T): T[K] => t[key],
     set: (data: T[K]) => (t: T): T =>
       t === undefined || t === null ? t :
@@ -66,33 +85,33 @@ export namespace Lens {
       {...(t as any), [key]: data}
   });
 
-  export function over<T>(key: keyof T): Lens<T, T[keyof T]>;
-  export function over<T, K1 extends keyof T = keyof T, K2 extends keyof T[K1] = keyof T[K1]>(
+  export function create<T>(key: keyof T): Lens<T, T[keyof T]>;
+  export function create<T, K1 extends keyof T = keyof T, K2 extends keyof T[K1] = keyof T[K1]>(
     k1: K1, k2: K2
   ): Lens<T, T[K1][K2]>;
-  export function over<
+  export function create<
     T, K1 extends keyof T = keyof T, K2 extends keyof T[K1] = keyof T[K1],
     K3 extends keyof T[K1][K2] = keyof T[K1][K2]
   >(k1: K1, k2: K2, k3: K3): Lens<T, T[K1][K2][K3]>;
-  export function over<
+  export function create<
     T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2],
     K4 extends keyof T[K1][K2][K3]
   >(k1: K1, k2: K2, k3: K3, k4: K4): Lens<T, T[K1][K2][K3][K4]>;
-  export function over<
+  export function create<
     T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2],
     K4 extends keyof T[K1][K2][K3], K5 extends keyof T[K1][K2][K3][K4]
   >(k1: K1, k2: K2, k3: K3, k4: K4, k5: K5): Lens<T, T[K1][K2][K3][K4][K5]>;
-  export function over<
+  export function create<
     T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2],
     K4 extends keyof T[K1][K2][K3], K5 extends keyof T[K1][K2][K3][K4],
     K6 extends keyof T[K1][K2][K3][K4][K5]
   >(k1: K1, k2: K2, k3: K3, k4: K4, k5: K5, k6: K6): Lens<T, T[K1][K2][K3][K4][K5][K6]>;
-  export function over<
+  export function create<
     T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2],
     K4 extends keyof T[K1][K2][K3], K5 extends keyof T[K1][K2][K3][K4],
     K6 extends keyof T[K1][K2][K3][K4][K5], K7 extends keyof T[K1][K2][K3][K4][K5][K6]
   >(k1: K1, k2: K2, k3: K3, k4: K4, k5: K5, k6: K6, k7: K7): Lens<T, T[K1][K2][K3][K4][K5][K6][K7]>;
-  export function over<
+  export function create<
     T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2],
     K4 extends keyof T[K1][K2][K3], K5 extends keyof T[K1][K2][K3][K4],
     K6 extends keyof T[K1][K2][K3][K4][K5], K7 extends keyof T[K1][K2][K3][K4][K5][K6],
@@ -100,7 +119,7 @@ export namespace Lens {
   >(
     k1: K1, k2: K2, k3: K3, k4: K4, k5: K5, k6: K6, k7: K7, k8: K8
   ): Lens<T, T[K1][K2][K3][K4][K5][K6][K7][K8]>;
-  export function over<
+  export function create<
     T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2],
     K4 extends keyof T[K1][K2][K3], K5 extends keyof T[K1][K2][K3][K4],
     K6 extends keyof T[K1][K2][K3][K4][K5], K7 extends keyof T[K1][K2][K3][K4][K5][K6],
@@ -109,7 +128,7 @@ export namespace Lens {
   >(
     k1: K1, k2: K2, k3: K3, k4: K4, k5: K5, k6: K6, k7: K7, k8: K8, k9: K9
   ): Lens<T, T[K1][K2][K3][K4][K5][K6][K7][K8][K9]>;
-  export function over<
+  export function create<
     T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2],
     K4 extends keyof T[K1][K2][K3], K5 extends keyof T[K1][K2][K3][K4],
     K6 extends keyof T[K1][K2][K3][K4][K5], K7 extends keyof T[K1][K2][K3][K4][K5][K6],
@@ -119,7 +138,13 @@ export namespace Lens {
   >(
     k1: K1, k2: K2, k3: K3, k4: K4, k5: K5, k6: K6, k7: K7, k8: K8, k9: K9, k10: K10
   ): Lens<T, T[K1][K2][K3][K4][K5][K6][K7][K8][K9][K10]>;
-  export function over(...keys: string[]) {
-    return _composeMany(...keys.map(_over));
+  /**
+   * Create a lens from a sequence of keys.
+   *
+   * @param {...string | number} keys
+   * @returns {Lens}
+   */
+  export function create(...keys: string[]) {
+    return _composeMany(...keys.map(_create));
   }
 }
